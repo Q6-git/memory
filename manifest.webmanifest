@@ -1,0 +1,14 @@
+{
+  "name": "되새김 — 망각 곡선 복습",
+  "short_name": "되새김",
+  "description": "에빙하우스 망각 곡선에 맞춰 복습 시점을 알려주는 암기 앱",
+  "start_url": "./#review",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f7fb",
+  "theme_color": "#4f46e5",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

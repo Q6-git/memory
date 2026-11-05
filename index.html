@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>되새김</title>
+  <meta name="description" content="에빙하우스 망각 곡선에 맞춰 복습 시점을 알려주는 암기 앱">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <h1>되새김</h1>
+    <span id="due-pill" class="pill" hidden></span>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button data-view="review" role="tab">복습</button>
+    <button data-view="add" role="tab">추가</button>
+    <button data-view="cards" role="tab">카드</button>
+    <button data-view="stats" role="tab">통계</button>
+    <button data-view="settings" role="tab">설정</button>
+  </nav>
+
+  <main id="app"></main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
