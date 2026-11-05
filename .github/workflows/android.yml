@@ -20,6 +20,7 @@ jobs:
           java-version: 21
       - run: npm ci
       - run: npm test
+      - run: node scripts/vendor.mjs
       - run: npx cap sync android
       - run: chmod +x gradlew && ./gradlew assembleDebug --no-daemon
         working-directory: android

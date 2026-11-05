@@ -7,8 +7,8 @@
   "scripts": {
     "start": "node scripts/serve.mjs",
     "test": "node --test tests/*.test.mjs",
-    "sync": "cap sync android",
-    "android": "cap sync android && cap open android"
+    "sync": "node scripts/vendor.mjs && cap sync android",
+    "android": "node scripts/vendor.mjs && cap sync android && cap open android"
   },
   "dependencies": {
     "@capacitor-community/text-to-speech": "^8.0.2",

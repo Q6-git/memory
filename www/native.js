@@ -1,10 +1,15 @@
 // 네이티브 앱(Capacitor)에서의 로컬 알림.
-// 번들러 없이 쓰기 위해, Capacitor가 웹뷰에 넣어 주는 전역 window.Capacitor를 사용한다.
+// 번들러 없이 쓰기 위해 @capacitor/core를 www/vendor에 복사해 두고 쓴다 (scripts/vendor.mjs).
+import { Capacitor, registerPlugin } from './vendor/capacitor-core.js';
 import { planNotifications } from './scheduler.js';
 
-const Cap = window.Capacitor;
-export const isNative = !!Cap?.isNativePlatform?.();
-const LN = isNative ? Cap.registerPlugin('LocalNotifications') : null;
+export const isNative = Capacitor.isNativePlatform();
+let LN = null;
+try {
+  if (isNative) LN = registerPlugin('LocalNotifications');
+} catch (e) {
+  console.warn('알림 플러그인을 불러오지 못했습니다', e); // 알림만 빠지고 앱은 동작해야 한다
+}
 
 const CHANNEL = 'review';
 
@@ -17,7 +22,7 @@ export async function permission() {
 export async function requestPermission() {
   if (!LN) return 'unsupported';
   const { display } = await LN.requestPermissions();
-  if (display === 'granted' && Cap.getPlatform() === 'android') {
+  if (display === 'granted' && Capacitor.getPlatform() === 'android') {
     await LN.createChannel({ id: CHANNEL, name: '복습 알림', importance: 4, vibration: true }).catch(() => {});
     // Android 12+: 정확한 시각 알림 권한이 꺼져 있으면 설정 화면으로 안내
     try {

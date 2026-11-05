@@ -1,6 +1,12 @@
 // 영어 발음 듣기: 앱에서는 안드로이드 기본 TTS(플러그인), 브라우저에서는 Web Speech API
-const Cap = window.Capacitor;
-const Plugin = Cap?.isNativePlatform?.() ? Cap.registerPlugin('TextToSpeech') : null;
+import { Capacitor, registerPlugin } from './vendor/capacitor-core.js';
+
+let Plugin = null;
+try {
+  if (Capacitor.isNativePlatform()) Plugin = registerPlugin('TextToSpeech');
+} catch (e) {
+  console.warn('TTS 플러그인을 불러오지 못했습니다', e);
+}
 const web = !Plugin && 'speechSynthesis' in window ? window.speechSynthesis : null;
 
 export const supported = !!(Plugin || web);
