@@ -23,11 +23,12 @@ let view = location.hash.slice(1) || 'review';
 let revealed = false;
 let selectedId = null;
 let cardFilter = 'all';
+let openStage = null; // 덱 탭에서 펼친 스테이지 'deckId:k'
 let lastSpoken = '';
 let ready = false; // 덱을 불러오기 전에는 그리지 않는다 (덱 카드 내용이 아직 없으므로)
 
 function load() {
-  const empty = { cards: [], settings: { ...DEFAULT_SETTINGS }, decks: {}, daily: null };
+  const empty = { cards: [], settings: { ...DEFAULT_SETTINGS }, decks: {}, daily: null, prechecked: {} };
   try {
     const raw = localStorage.getItem(STORE_KEY);
     if (!raw) return empty;
@@ -39,6 +40,7 @@ function load() {
       cards: (s.cards || []).map((c) => (c.deck ? c : { ...c, deck: D.MY_DECK })),
       settings: { ...DEFAULT_SETTINGS, ...s.settings },
       decks: s.decks || {},
+      prechecked: s.prechecked || {},
     };
   } catch (e) {
     console.warn('저장된 데이터를 읽지 못했습니다', e);
@@ -67,10 +69,12 @@ async function loadDecks() {
 }
 
 const cfg = () => ({ targetRetention: state.settings.targetRetention, firstIntervalMin: state.settings.firstIntervalMin });
+// "이미 알아요"로 뺀 카드는 복습·알림에서 제외
+const active = () => state.cards.filter((c) => !c.known);
 const enabled = () => Object.fromEntries(Object.entries(state.decks).map(([id, v]) => [id, !!v.enabled]));
 
 function queue(now = Date.now()) {
-  const due = S.dueCards(state.cards, now);
+  const due = S.dueCards(active(), now);
   const fresh = D.newQueue({
     decks, enabled: enabled(), cards: state.cards, daily: state.daily,
     newPerDay: state.settings.newPerDay, dueCount: due.length, now,
@@ -174,13 +178,19 @@ function renderReview(now) {
 
   if (fresh.items.length) {
     const { deck, item } = fresh.items[0];
+    const k = D.stageIndexOf(deck, item.id);
+    const stage = D.stages(deck, state.cards)[k];
+    if (!stage.started && !state.prechecked[`${deck.id}:${k}`]) return renderPrecheck(deck, stage, meta);
     const r = { kind: deck.kind, deck, ...item };
     return `<section class="review">
-      ${meta}<span class="new-badge">새 카드 · ${esc(deck.title)}</span></div>
+      ${meta}<span class="new-badge">새 카드 · ${esc(deck.title)} · 스테이지 ${k + 1}</span></div>
       <div class="flash intro">${faceHTML(r, 'front')}<hr>${faceHTML(r, 'back')}</div>
       <p class="hint muted">${r.kind === 'sentence' ? '영어 문장을 들으며 두세 번 따라 말해 보세요.' : '발음을 듣고 예문까지 소리 내어 읽어 보세요.'}</p>
-      <button class="primary wide" data-learn="${deck.id}:${item.id}">외웠어요 <small>(Space)</small></button>
-      <p class="hint muted">${state.settings.firstIntervalMin}분 뒤에 첫 복습을 알려드려요.</p>
+      <div class="row2">
+        <button data-known="${deck.id}:${item.id}">이미 알아요 <small>(K)</small></button>
+        <button class="primary" data-learn="${deck.id}:${item.id}">외웠어요 <small>(Space)</small></button>
+      </div>
+      <p class="hint muted">“외웠어요”는 ${state.settings.firstIntervalMin}분 뒤 첫 복습, “이미 알아요”는 복습 없이 넘어가고 오늘 할당량도 쓰지 않아요.</p>
     </section>`;
   }
 
@@ -192,7 +202,7 @@ function renderReview(now) {
     </section>`;
   }
 
-  const next = [...state.cards].sort((a, b) => a.due - b.due)[0];
+  const next = active().sort((a, b) => a.due - b.due)[0];
   const msg = {
     quota: `오늘의 새 카드를 다 배웠어요 🎉`,
     finished: '켠 덱의 카드를 모두 배웠어요 🎉',
@@ -206,6 +216,58 @@ function renderReview(now) {
   </section>`;
 }
 
+const STATUS_LABEL = { new: '새 카드', learning: '배우는 중', day: '1일+', week: '1주+', known: '알아요' };
+const starsHTML = (n) => `<span class="stars" aria-label="별 ${n}개">${'★'.repeat(n)}${'☆'.repeat(3 - n)}</span>`;
+const itemFront = (deck, it) => (deck.kind === 'sentence' ? it.ko : it.en);
+const itemBack = (deck, it) => (deck.kind === 'sentence' ? it.en : it.ko);
+
+// 스테이지를 시작하기 전에 아는 카드를 한꺼번에 빼는 화면
+function renderPrecheck(deck, stage, meta) {
+  const rows = stage.items.map(({ item }) => `<li><label class="check-row">
+      <input type="checkbox" name="known" value="${item.id}">
+      <span><b lang="${deck.kind === 'sentence' ? 'ko' : 'en'}">${esc(itemFront(deck, item))}</b><small class="muted">${esc(itemBack(deck, item))}</small></span>
+    </label></li>`).join('');
+  return `<section class="review">
+    ${meta}<span class="new-badge">${esc(deck.title)}</span></div>
+    <div class="stage-intro">
+      <h2>스테이지 ${stage.index + 1} 시작</h2>
+      <p class="muted">이미 잘 아는 카드를 체크하면 복습 없이 넘어가요. 모르는 카드만 하루 ${state.settings.newPerDay}개씩 배워요.</p>
+    </div>
+    <form id="precheck" data-pc-deck="${deck.id}" data-pc-stage="${stage.index}">
+      <ul class="list check-list">${rows}</ul>
+      <button class="primary wide">시작하기</button>
+    </form>
+  </section>`;
+}
+
+function renderStageDetail(deck, stage) {
+  const rows = stage.items.map(({ item, card, status }) => `<li class="stage-item">
+      <span><b>${esc(itemFront(deck, item))}</b><small class="muted">${esc(itemBack(deck, item))}</small></span>
+      <span class="badge ${status}">${STATUS_LABEL[status]}</span>
+      ${status === 'known'
+        ? `<button class="link" data-unknown="${card.id}">다시 배우기</button>`
+        : status === 'new' && stage.unlocked ? `<button class="link" data-known="${deck.id}:${item.id}">알아요</button>` : '<span></span>'}
+    </li>`).join('');
+  return `<div class="stage-detail">
+    <div class="stage-detail-head"><b>스테이지 ${stage.index + 1}</b> ${starsHTML(stage.stars)}</div>
+    <p class="muted small-text">★ 모두 배움 → 다음 스테이지 열림 · ★★ 모두 1일 이상 기억 · ★★★ 모두 1주 이상 기억</p>
+    <ul class="list">${rows}</ul>
+  </div>`;
+}
+
+function stageMap(deck) {
+  const all = D.stages(deck, state.cards);
+  const current = all.find((st) => st.unlocked && st.stars < 1);
+  const tiles = all.map((st) => {
+    const cls = !st.unlocked ? 'locked' : st === current ? 'current' : st.stars >= 1 ? 'cleared' : '';
+    return `<button class="tile ${cls}" data-stage="${deck.id}:${st.index}" ${st.unlocked ? '' : 'disabled'} aria-label="스테이지 ${st.index + 1}">
+      <span class="num">${st.unlocked ? st.index + 1 : '🔒'}</span>${st.unlocked ? starsHTML(st.stars) : ''}
+    </button>`;
+  }).join('');
+  const open = openStage?.startsWith(deck.id + ':') ? all[+openStage.split(':')[1]] : null;
+  return `<div class="tiles">${tiles}</div>${open ? renderStageDetail(deck, open) : ''}`;
+}
+
 function renderDecks() {
   const d = D.dailyFor(state.daily);
   const deckRows = [...decks.values()].map((deck) => {
@@ -217,7 +279,8 @@ function renderDecks() {
         <label class="switch"><input type="checkbox" data-deck="${deck.id}" ${on ? 'checked' : ''}> 학습</label>
       </div>
       <div class="bar wide-bar"><i style="width:${(p.learned / Math.max(1, p.total)) * 100}%"></i></div>
-      <small class="muted">${p.learned} / ${p.total} 배움</small>
+      <small class="muted">${p.learned} / ${p.total} 배움 (알아요 포함) · 스테이지를 누르면 카드 목록이 보여요</small>
+      ${stageMap(deck)}
     </div>`;
   }).join('');
 
@@ -255,10 +318,10 @@ function renderCards(now) {
     .map(([v, l]) => `<option value="${v}" ${v === cardFilter ? 'selected' : ''}>${esc(l)}</option>`).join('');
   const rows = state.cards
     .filter((c) => cardFilter === 'all' || c.deck === cardFilter)
-    .sort((a, b) => a.due - b.due)
+    .sort((a, b) => (a.known ? Infinity : a.due) - (b.known ? Infinity : b.due))
     .map((c) => {
-      const r = S.currentRetention(c, now);
-      const when = c.due <= now ? '<b class="due-now">지금</b>' : `${S.formatDuration(c.due - now)} 후`;
+      const r = c.known ? 1 : S.currentRetention(c, now);
+      const when = c.known ? '<span class="badge known">알아요</span>' : c.due <= now ? '<b class="due-now">지금</b>' : `${S.formatDuration(c.due - now)} 후`;
       return `<li><button class="row" data-open="${c.id}">
         <span class="title">${esc(D.frontText(c, decks))}</span>
         <span class="bar" title="현재 기억 확률 ${pct(r)}"><i style="width:${r * 100}%"></i></span>
@@ -271,6 +334,14 @@ function renderCards(now) {
 function renderCardDetail(card, now) {
   const r = D.resolve(card, decks);
   const isDeck = card.deck !== D.MY_DECK;
+  if (card.known) {
+    return `<section class="stack">
+      <button class="link" data-back>← 목록</button>
+      <div class="flash small">${faceHTML(r, 'front')}<hr>${faceHTML(r, 'back')}</div>
+      <p class="muted">“이미 알아요”로 표시한 카드예요. 복습에 나오지 않아요.</p>
+      <button data-unknown="${card.id}">다시 배우기</button>
+    </section>`;
+  }
   return `<section class="stack">
     <button class="link" data-back>← 목록</button>
     <div class="flash small">${faceHTML(r, 'front')}<hr>${faceHTML(r, 'back')}</div>
@@ -282,12 +353,13 @@ function renderCardDetail(card, now) {
     </div>
     <figure>${curveSVG(card, now, state.settings.targetRetention)}
       <figcaption class="muted">복습할 때마다 기억이 100%로 회복되고, 곡선이 점점 완만해져요. (가로축은 로그 시간)</figcaption></figure>
+    <button data-know-card="${card.id}">이제 복습 그만하기 (이미 알아요)</button>
     <button class="danger" data-delete="${card.id}">${isDeck ? '학습 기록 지우기 (새 카드로 되돌리기)' : '카드 삭제'}</button>
   </section>`;
 }
 
 function renderStats(now) {
-  const cards = state.cards;
+  const cards = active();
   const avg = cards.length ? cards.reduce((s, c) => s + S.currentRetention(c, now), 0) / cards.length : 0;
   const dayStart = new Date(now).setHours(0, 0, 0, 0);
   const reviewsToday = cards.reduce((s, c) => s + c.history.filter((h) => h.grade !== 'learn' && h.t >= dayStart).length, 0);
@@ -363,7 +435,7 @@ function renderSettings() {
 
 // ---------- 발음 ----------
 function autoSpeak() {
-  if (!TTS.supported || !state.settings.ttsAuto || view !== 'review') return;
+  if (!TTS.supported || !state.settings.ttsAuto || view !== 'review' || $('#precheck')) return;
   const { due, fresh } = queue();
   let key = '', text = null;
   if (due.length) {
@@ -386,6 +458,26 @@ function bind(root) {
   root.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
   root.querySelector('[data-reveal]')?.addEventListener('click', reveal);
   root.querySelector('[data-learn]')?.addEventListener('click', (e) => learn(e.currentTarget.dataset.learn));
+  root.querySelectorAll('[data-known]').forEach((b) => b.addEventListener('click', () => markKnown([b.dataset.known])));
+  root.querySelectorAll('[data-unknown]').forEach((b) => b.addEventListener('click', () => unknow(b.dataset.unknown)));
+  root.querySelector('[data-know-card]')?.addEventListener('click', (e) => {
+    const card = state.cards.find((c) => c.id === e.currentTarget.dataset.knowCard);
+    if (!card || !confirm('이 카드는 이제 복습에 나오지 않아요. 괜찮을까요?')) return;
+    card.known = true;
+    save();
+    toast('복습에서 뺐어요 · 카드 탭에서 되돌릴 수 있어요');
+  });
+  root.querySelectorAll('button[data-stage]').forEach((b) => b.addEventListener('click', () => {
+    openStage = openStage === b.dataset.stage ? null : b.dataset.stage;
+    render();
+  }));
+  root.querySelector('#precheck')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const { pcDeck: deck, pcStage: stage } = e.target.dataset;
+    const ids = [...e.target.querySelectorAll('input[name=known]:checked')].map((i) => `${deck}:${i.value}`);
+    state.prechecked[`${deck}:${stage}`] = true;
+    markKnown(ids);
+  });
   root.querySelector('[data-more]')?.addEventListener('click', () => {
     const d = D.dailyFor(state.daily);
     state.daily = { ...d, extra: d.extra + D.EXTRA_STEP };
@@ -482,7 +574,7 @@ function bind(root) {
   });
   root.querySelector('#reset')?.addEventListener('click', () => {
     if (!confirm('모든 카드와 복습 기록을 삭제할까요? 되돌릴 수 없어요.')) return;
-    state = { cards: [], settings: { ...DEFAULT_SETTINGS }, decks: {}, daily: null };
+    state = { cards: [], settings: { ...DEFAULT_SETTINGS }, decks: {}, daily: null, prechecked: {} };
     save();
   });
 }
@@ -508,6 +600,45 @@ function addCards(pairs) {
   save();
 }
 
+// 스테이지 별 1개(모두 배움)를 새로 달성했으면 축하
+function withStageCelebration(keys, fn) {
+  const touched = [...new Set(keys.map((k) => k.split(':')[0]))].filter((id) => decks.has(id));
+  const before = touched.map((id) => D.stages(decks.get(id), state.cards).map((st) => st.stars));
+  fn();
+  touched.forEach((id, i) => {
+    D.stages(decks.get(id), state.cards).forEach((st, k) => {
+      if (before[i][k] < 1 && st.stars >= 1) toast(`🎉 ${decks.get(id).title} 스테이지 ${k + 1} 클리어!`);
+    });
+  });
+}
+
+// "이미 알아요": 복습 없이 넘어가고, 오늘 할당량도 쓰지 않는다
+function markKnown(keys) {
+  withStageCelebration(keys, () => {
+    const now = Date.now();
+    for (const key of keys) {
+      const [deck, ref] = key.split(':');
+      if (state.cards.some((c) => c.deck === deck && c.ref === ref)) continue;
+      state.cards.push({ id: `${now.toString(36)}-${Math.random().toString(36).slice(2, 8)}`, deck, ref, known: true, created: now, history: [{ t: now, grade: 'known' }] });
+    }
+  });
+  save();
+}
+
+function unknow(id) {
+  const card = state.cards.find((c) => c.id === id);
+  if (!card) return;
+  if (card.stability) {
+    card.known = false; // 배우던 카드면 바로 복습 대상으로
+    card.due = Math.min(card.due, Date.now());
+  } else {
+    state.cards = state.cards.filter((c) => c !== card); // 처음부터 알아요였으면 다시 새 카드로
+  }
+  selectedId = null;
+  save();
+  toast('다시 배우는 카드로 돌려놨어요');
+}
+
 // 새 카드를 "외웠어요" → 망각 곡선 시작
 function learn(key) {
   const [deckId, ref] = key.split(':');
@@ -515,7 +646,7 @@ function learn(key) {
   const card = S.newCard({ now: Date.now(), cfg: cfg() });
   delete card.front;
   delete card.back;
-  state.cards.push({ ...card, deck: deckId, ref });
+  withStageCelebration([key], () => state.cards.push({ ...card, deck: deckId, ref }));
   const d = D.dailyFor(state.daily);
   state.daily = { ...d, introduced: d.introduced + 1 };
   save();
@@ -538,6 +669,8 @@ document.addEventListener('keydown', (e) => {
       e.preventDefault();
       btn.click();
     }
+  } else if (e.key === 'k' || e.key === 'K') {
+    $('#app [data-known]')?.click();
   } else if (revealed && ['1', '2', '3', '4'].includes(e.key)) {
     $(`[data-grade="${S.GRADES[+e.key - 1]}"]`)?.click();
   }
@@ -553,7 +686,7 @@ function toast(msg) {
 // 네이티브 앱: OS 로컬 알림을 미리 예약 (native.js)
 // 웹: 탭이 열려 있으면 30초마다 확인, 닫혀 있으면 서비스 워커의 Periodic Background Sync
 const notified = new Set();
-const withFronts = () => state.cards.map((c) => ({ ...c, front: D.frontText(c, decks) }));
+const withFronts = () => active().map((c) => ({ ...c, front: D.frontText(c, decks) }));
 
 function syncReminders() {
   const cards = withFronts();
@@ -578,7 +711,7 @@ function checkDue() {
   if (!st.notify) return;
   const now = Date.now();
   if (S.deferForQuietHours(now, st.quietStart, st.quietEnd) !== now) return;
-  const due = S.dueCards(state.cards, now);
+  const due = S.dueCards(active(), now);
   const fresh = due.filter((c) => !notified.has(c.id + ':' + c.due));
   if (!fresh.length) return;
   fresh.forEach((c) => notified.add(c.id + ':' + c.due));

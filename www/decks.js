@@ -6,6 +6,8 @@
 export const MY_DECK = 'mine';
 export const BACKLOG_LIMIT = 50; // 밀린 복습이 이보다 많으면 그날 새 카드를 멈춘다
 export const EXTRA_STEP = 5; // "오늘 N개 더 배우기"
+export const STAGE_SIZE = 20;
+const DAY = 24 * 60 * 60 * 1000;
 
 export function indexDeck(deck) {
   return { ...deck, byId: new Map(deck.items.map((it) => [it.id, it])) };
@@ -66,7 +68,7 @@ export function newQueue({ decks, enabled, cards, daily, newPerDay, dueCount, no
   const learned = new Set(cards.filter((c) => c.deck && c.deck !== MY_DECK).map((c) => `${c.deck}:${c.ref}`));
   // 오늘 덜 꺼낸 덱부터: 한 장씩 배울 때마다 목록이 다시 계산되므로, 이렇게 해야 덱이 번갈아 나온다
   const dayStart = new Date(now).setHours(0, 0, 0, 0);
-  const todayCount = (id) => cards.filter((c) => c.deck === id && c.created >= dayStart).length;
+  const todayCount = (id) => cards.filter((c) => c.deck === id && !c.known && c.created >= dayStart).length;
   const pools = active
     .map((d, order) => ({ deck: d, order, today: todayCount(d.id), rest: d.items.filter((it) => !learned.has(`${d.id}:${it.id}`)) }))
     .sort((a, b) => a.today - b.today || a.order - b.order);
@@ -91,4 +93,37 @@ export function newQueue({ decks, enabled, cards, daily, newPerDay, dueCount, no
     if (!took) break;
   }
   return { items, reason: 'ok', left };
+}
+
+// ---------- 스테이지 ----------
+// 덱을 STAGE_SIZE장씩 나눈 단위. 별 1개(모두 한 번씩 배움)면 다음 스테이지가 열린다.
+//   ★ 모두 배움  ★★ 모두 복습 간격 1일 이상  ★★★ 모두 7일 이상  ("이미 알아요"는 ★★★로 친다)
+
+export const stageCount = (deck) => Math.ceil(deck.items.length / STAGE_SIZE);
+export const stageItems = (deck, k) => deck.items.slice(k * STAGE_SIZE, (k + 1) * STAGE_SIZE);
+export const stageIndexOf = (deck, itemId) => Math.floor(deck.items.findIndex((it) => it.id === itemId) / STAGE_SIZE);
+
+/** 항목 하나의 상태: 'new' | 'learning' | 'day' | 'week' | 'known' */
+export function itemStatus(card) {
+  if (!card) return 'new';
+  if (card.known) return 'known';
+  const interval = card.due - card.lastReview;
+  return interval >= 7 * DAY ? 'week' : interval >= DAY ? 'day' : 'learning';
+}
+
+const RANK = { new: 0, learning: 1, day: 2, week: 3, known: 3 };
+
+export function stages(deck, cards) {
+  const byRef = new Map(cards.filter((c) => c.deck === deck.id).map((c) => [c.ref, c]));
+  const out = [];
+  for (let k = 0; k < stageCount(deck); k++) {
+    const items = stageItems(deck, k).map((item) => {
+      const card = byRef.get(item.id);
+      return { item, card, status: itemStatus(card) };
+    });
+    const min = Math.min(...items.map((x) => RANK[x.status]));
+    const started = items.some((x) => x.card);
+    out.push({ index: k, items, stars: min, started, unlocked: k === 0 || out[k - 1].stars >= 1 });
+  }
+  return out;
 }

@@ -87,3 +87,35 @@ test('한 장씩 배워도 덱이 번갈아 나온다 (오늘 덜 꺼낸 덱 먼
   assert.equal(D.newQueue({ ...base, cards: [today('w', 0)] }).items[0].deck.id, 's');
   assert.equal(D.newQueue({ ...base, cards: [today('w', 0), today('s', 0)] }).items[0].deck.id, 'w');
 });
+
+test('스테이지: 20장 단위, 별 계산, 앞 스테이지를 다 배워야 다음이 열린다', () => {
+  const DAY = 86400000;
+  const deck = mk('w', 'word', 45);
+  assert.equal(D.stageCount(deck), 3);
+  assert.equal(D.stageIndexOf(deck, 'w-20'), 1);
+
+  const card = (i, interval, extra = {}) => ({ deck: 'w', ref: `w-${i}`, lastReview: NOW, due: NOW + interval, ...extra });
+  let st = D.stages(deck, []);
+  assert.deepEqual(st.map((s) => [s.stars, s.unlocked, s.started]), [[0, true, false], [0, false, false], [0, false, false]]);
+
+  // 1스테이지: 19장 배움 + 1장 이미 알아요 → ★, 2스테이지 열림
+  const cards = [...Array.from({ length: 19 }, (_, i) => card(i, 60e3)), { deck: 'w', ref: 'w-19', known: true }];
+  st = D.stages(deck, cards);
+  assert.equal(st[0].stars, 1);
+  assert.equal(st[1].unlocked, true);
+  assert.equal(st[2].unlocked, false);
+
+  // 모두 간격 1일 이상 → ★★, 7일 이상 → ★★★ (알아요는 ★★★로 침)
+  const long = (d) => [...Array.from({ length: 19 }, (_, i) => card(i, d)), { deck: 'w', ref: 'w-19', known: true }];
+  assert.equal(D.stages(deck, long(DAY))[0].stars, 2);
+  assert.equal(D.stages(deck, long(7 * DAY))[0].stars, 3);
+  assert.equal(D.itemStatus({ known: true }), 'known');
+  assert.equal(D.itemStatus(undefined), 'new');
+});
+
+test('"이미 알아요"는 오늘 번갈아 배분 계산에 넣지 않는다', () => {
+  const decks = decksOf(mk('w', 'word', 20), mk('s', 'sentence', 20));
+  const known = Array.from({ length: 5 }, (_, i) => ({ deck: 'w', ref: `w-${i}`, known: true, created: NOW - 1000 }));
+  const q = D.newQueue({ decks, enabled: { w: true, s: true }, cards: known, daily: null, newPerDay: 4, dueCount: 0, now: NOW });
+  assert.deepEqual(q.items.map((x) => x.item.id), ['w-5', 's-0', 'w-6', 's-1']);
+});
