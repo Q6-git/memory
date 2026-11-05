@@ -1,5 +1,6 @@
 import * as S from './scheduler.js';
 import { curveSVG } from './curve.js';
+import * as Native from './native.js';
 
 const STORE_KEY = 'doesaegim:v1';
 const DEFAULT_SETTINGS = {
@@ -36,6 +37,7 @@ function save() {
     alert('저장에 실패했습니다: ' + e.message);
   }
   syncScheduleForWorker();
+  Native.syncNotifications(state.cards, state.settings);
   render();
 }
 
@@ -202,14 +204,14 @@ function renderStats(now) {
 
 function renderSettings() {
   const st = state.settings;
-  const perm = 'Notification' in window ? Notification.permission : 'unsupported';
+  const perm = Native.isNative ? nativePerm : 'Notification' in window ? Notification.permission : 'unsupported';
   const hours = (sel) => Array.from({ length: 24 }, (_, h) => `<option value="${h}" ${h === sel ? 'selected' : ''}>${h}시</option>`).join('');
   return `<section class="stack">
     <h2>알림</h2>
     ${perm === 'unsupported'
       ? '<p class="muted">이 브라우저는 알림을 지원하지 않아요.</p>'
       : `<label class="switch"><input type="checkbox" id="notify" ${st.notify && perm === 'granted' ? 'checked' : ''}> 복습할 때가 되면 알림 받기</label>
-         ${perm === 'denied' ? '<p class="warn">브라우저에서 알림이 차단되어 있어요. 사이트 설정에서 허용해 주세요.</p>' : ''}
+         ${perm === 'denied' ? `<p class="warn">${Native.isNative ? '알림이 꺼져 있어요. 휴대폰 설정 → 앱 → 되새김 → 알림에서 허용해 주세요.' : '브라우저에서 알림이 차단되어 있어요. 사이트 설정에서 허용해 주세요.'}</p>` : ''}
          <button id="test-notify" ${perm !== 'granted' ? 'disabled' : ''}>테스트 알림 보내기</button>`}
     <div class="row2">
       <label>방해 금지 시작<select id="quietStart">${hours(st.quietStart)}</select></label>
@@ -226,7 +228,7 @@ function renderSettings() {
     <label>첫 복습까지 (분)<input id="firstIntervalMin" type="number" min="1" max="1440" value="${st.firstIntervalMin}"></label>
 
     <h2>데이터</h2>
-    <p class="muted">카드는 이 기기의 브라우저에만 저장돼요. 다른 기기로 옮기려면 내보내기/가져오기를 쓰세요.</p>
+    <p class="muted">카드는 이 기기에만 저장돼요. 다른 기기로 옮기려면 내보내기/가져오기를 쓰세요.</p>
     <div class="row2">
       <button id="export">내보내기 (JSON)</button>
       <label class="button">가져오기<input id="import" type="file" accept="application/json" hidden></label>
@@ -271,15 +273,17 @@ function bind(root) {
   // 설정
   root.querySelector('#notify')?.addEventListener('change', async (e) => {
     if (e.target.checked) {
-      const p = await Notification.requestPermission();
+      const p = Native.isNative ? (nativePerm = await Native.requestPermission()) : await Notification.requestPermission();
       state.settings.notify = p === 'granted';
-      if (p === 'granted') registerPeriodicSync();
+      if (p === 'granted' && !Native.isNative) registerPeriodicSync();
     } else {
       state.settings.notify = false;
     }
     save();
   });
-  root.querySelector('#test-notify')?.addEventListener('click', () => notify('테스트 알림', '이렇게 복습 시간을 알려드려요.'));
+  root.querySelector('#test-notify')?.addEventListener('click', () =>
+    Native.isNative ? Native.testNotification() : notify('테스트 알림', '이렇게 복습 시간을 알려드려요.'),
+  );
   for (const id of ['quietStart', 'quietEnd', 'targetRetention', 'firstIntervalMin']) {
     root.querySelector('#' + id)?.addEventListener('change', (e) => {
       const v = Number(e.target.value);
@@ -375,6 +379,12 @@ async function notify(title, body) {
 }
 
 function checkDue() {
+  if (Native.isNative) {
+    // 네이티브에서는 OS가 예약된 알림을 띄우므로 화면만 갱신
+    if (view === 'review' && !revealed) render();
+    else renderHeader();
+    return;
+  }
   // 입력 중인 화면을 지우지 않도록, 복습 대기 화면에서만 본문을 다시 그린다
   if (view === 'review' && !revealed) render();
   else renderHeader();
@@ -419,7 +429,16 @@ async function registerPeriodicSync() {
   }
 }
 
-if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+// 네이티브 앱: OS 로컬 알림 사용 (서비스 워커 불필요)
+let nativePerm = 'default';
+if (Native.isNative) {
+  Native.permission().then((p) => {
+    nativePerm = p;
+    if (view === 'settings') render();
+    Native.syncNotifications(state.cards, state.settings);
+  });
+  Native.onNotificationTap((v) => go(v));
+} else if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   navigator.serviceWorker.register('sw.js').then(() => state.settings.notify && registerPeriodicSync()).catch(console.warn);
 }
 

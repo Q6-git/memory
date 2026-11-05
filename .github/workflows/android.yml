@@ -1,0 +1,29 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main, 'claude/**']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm test
+      - run: npx cap sync android
+      - run: chmod +x gradlew && ./gradlew assembleDebug --no-daemon
+        working-directory: android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: doesaegim-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk

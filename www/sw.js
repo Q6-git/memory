@@ -1,7 +1,7 @@
 // 서비스 워커: 오프라인 캐시 + 앱이 닫혀 있을 때의 복습 알림
 const SHELL_CACHE = 'doesaegim-shell-v1';
 const META_CACHE = 'doesaegim-meta';
-const SHELL = ['./', './index.html', './styles.css', './app.js', './scheduler.js', './curve.js', './manifest.webmanifest', './icon.svg'];
+const SHELL = ['./', './index.html', './styles.css', './app.js', './scheduler.js', './curve.js', './native.js', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(SHELL_CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));

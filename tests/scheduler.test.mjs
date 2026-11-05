@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import * as S from '../scheduler.js';
+import * as S from '../www/scheduler.js';
 
 const T0 = new Date('2026-01-01T09:00:00').getTime();
 const near = (a, b, tol) => assert.ok(Math.abs(a - b) <= tol, `${a} !≈ ${b}`);
@@ -81,4 +81,26 @@ test('formatDuration', () => {
   assert.equal(S.formatDuration(1.5 * S.DAY), '1.5일');
   assert.equal(S.formatDuration(10 * S.DAY), '10일');
   assert.equal(S.formatDuration(60 * S.DAY), '2개월');
+});
+
+test('알림 계획: 가까운 카드는 묶고, 방해 금지 시간은 피하고, 개수를 제한한다', () => {
+  const now = new Date(2026, 0, 1, 12, 0).getTime();
+  const at = (h, m = 0, d = 1) => new Date(2026, 0, d, h, m).getTime();
+  const card = (front, due) => ({ front, due });
+  const plan = S.planNotifications(
+    [card('a', at(13)), card('b', at(13, 5)), card('c', at(15)), card('d', at(2, 0, 2)), card('late', at(11))],
+    { now, quietStart: 23, quietEnd: 8 },
+  );
+  // 이미 지난 카드(late)는 1분 뒤, a+b는 하나로 묶임, d는 다음날 8시로 미뤄짐
+  assert.equal(plan.length, 4);
+  assert.equal(plan[0].at, now + S.MINUTE);
+  assert.equal(plan[1].at, at(13, 5));
+  assert.equal(plan[1].count, 3);
+  assert.match(plan[1].body, /“a” 외 2개/);
+  assert.equal(plan[3].at, at(8, 0, 2));
+  assert.equal(plan[3].count, 5);
+  assert.deepEqual(plan.map((p) => p.id), [1, 2, 3, 4]);
+
+  const many = Array.from({ length: 200 }, (_, i) => card(String(i), now + (i + 1) * S.HOUR));
+  assert.equal(S.planNotifications(many, { now, limit: 60 }).length, 60);
 });

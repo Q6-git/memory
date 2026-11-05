@@ -133,3 +133,38 @@ export function deferForQuietHours(ts, quietStart, quietEnd) {
   if (end.getTime() <= ts) end.setDate(end.getDate() + 1);
   return end.getTime();
 }
+
+/**
+ * 앞으로 보낼 알림 목록을 미리 계획한다 (네이티브 로컬 알림 예약용).
+ * - 각 카드의 복습 시각을 방해 금지 시간 밖으로 미루고
+ * - windowMs 안에 몰린 카드는 알림 하나로 묶고
+ * - OS 예약 개수 제한(iOS 64개)을 넘지 않도록 앞에서부터 limit개만 남긴다.
+ * 알림 본문의 개수는 "그 시각까지 복습 안 하고 쌓인 카드 수"다. 복습하면 앱이 계획을 다시 세운다.
+ */
+export function planNotifications(cards, { now = Date.now(), quietStart, quietEnd, windowMs = 10 * MINUTE, limit = 60 } = {}) {
+  const items = cards
+    .map((c) => ({ card: c, at: deferForQuietHours(Math.max(c.due, now + MINUTE), quietStart, quietEnd) }))
+    .sort((a, b) => a.at - b.at);
+  const plan = [];
+  for (const it of items) {
+    const last = plan[plan.length - 1];
+    if (last && it.at - last.firstAt <= windowMs) {
+      last.at = it.at; // 묶음의 마지막 카드까지 복습할 때가 됐을 때 알린다
+      last.fronts.push(it.card.front);
+    } else {
+      if (plan.length >= limit) break;
+      plan.push({ firstAt: it.at, at: it.at, fronts: [it.card.front] });
+    }
+  }
+  let pending = 0;
+  return plan.map((p, i) => {
+    pending += p.fronts.length;
+    return {
+      id: i + 1,
+      at: p.at,
+      title: '복습할 시간이에요',
+      body: `“${p.fronts[0]}”${pending > 1 ? ` 외 ${pending - 1}개` : ''} — 잊기 전에 떠올려 보세요.`,
+      count: pending,
+    };
+  });
+}

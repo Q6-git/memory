@@ -5,7 +5,17 @@
   "description": "에빙하우스 망각 곡선 기반 간격 반복 암기 앱 (PWA)",
   "type": "module",
   "scripts": {
-    "start": "python3 -m http.server 8000",
-    "test": "node --test tests/*.test.mjs"
+    "start": "node scripts/serve.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "sync": "cap sync android",
+    "android": "cap sync android && cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.0",
+    "@capacitor/core": "^8.6.0",
+    "@capacitor/local-notifications": "^8.3.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.6.0"
   }
 }

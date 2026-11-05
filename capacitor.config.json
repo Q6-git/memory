@@ -1,0 +1,11 @@
+{
+  "appId": "app.doesaegim",
+  "appName": "되새김",
+  "webDir": "www",
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#4f46e5",
+      "smallIcon": "ic_stat_notify"
+    }
+  }
+}
