@@ -1,0 +1,101 @@
+# id	situation	ko	en	key	note
+s-greet-01	인사·안부	오랜만이에요!	It's been a while!	It's been a while	
+s-greet-02	인사·안부	그동안 어떻게 지냈어요?	How have you been?	How have you been	오랜만에 만난 사람에게
+s-greet-03	인사·안부	별일 없어요, 늘 똑같죠.	Not much. Same as usual.	Same as usual	
+s-greet-04	인사·안부	만나서 반가워요.	It's nice to meet you.	nice to meet you	처음 만났을 때
+s-greet-05	인사·안부	주말 잘 보냈어요?	Did you have a good weekend?	have a good weekend	
+s-greet-06	인사·안부	괜찮아요? 안색이 안 좋아 보여요.	Is everything okay? You look a little pale.	Is everything okay	
+s-greet-07	인사·안부	가족들은 잘 지내죠?	How's your family doing?	How's your family doing	
+s-greet-08	인사·안부	이제 가 봐야겠어요.	I should get going.	get going	
+s-greet-09	인사·안부	얘기 즐거웠어요.	It was nice talking to you.	nice talking to you	헤어질 때
+s-greet-10	인사·안부	조심히 가요.	Take care.	Take care	
+s-intro-01	자기소개	저는 서울에서 왔어요.	I'm from Seoul.	I'm from	
+s-intro-02	자기소개	저는 IT 회사에서 일해요.	I work for an IT company.	work for	work for + 회사
+s-intro-03	자기소개	마케팅 일을 해요.	I work in marketing.	work in	work in + 분야
+s-intro-04	자기소개	쉬는 날엔 주로 영화를 봐요.	I usually watch movies on my days off.	on my days off	
+s-intro-05	자기소개	영어 공부한 지 1년 됐어요.	I've been studying English for a year.	I've been studying	
+s-intro-06	자기소개	제 영어가 아직 서툴러요.	My English isn't very good yet.	isn't very good yet	
+s-intro-07	자기소개	요즘 등산에 푹 빠졌어요.	I'm really into hiking these days.	I'm really into	
+s-intro-08	자기소개	저는 외동이에요.	I'm an only child.	an only child	
+s-intro-09	자기소개	결혼했고 아이가 둘 있어요.	I'm married with two kids.	married with	
+s-intro-10	자기소개	여기 산 지 5년 됐어요.	I've lived here for five years.	I've lived here for	
+s-food-01	카페·식당	두 명 자리 있어요?	Do you have a table for two?	a table for two	
+s-food-02	카페·식당	주문할게요.	I'm ready to order.	ready to order	
+s-food-03	카페·식당	추천 메뉴가 뭐예요?	What do you recommend?	What do you recommend	
+s-food-04	카페·식당	아이스 아메리카노 한 잔 주세요.	Can I get an iced americano?	Can I get	주문할 때 가장 흔한 표현
+s-food-05	카페·식당	포장해 주세요.	Can I get this to go?	to go	영국에서는 takeaway
+s-food-06	카페·식당	덜 맵게 해 주실 수 있어요?	Can you make it less spicy?	less spicy	
+s-food-07	카페·식당	양파는 빼 주세요.	No onions, please.	No onions	
+s-food-08	카페·식당	이거 제가 주문한 게 아닌 것 같아요.	I don't think this is what I ordered.	what I ordered	
+s-food-09	카페·식당	계산서 주세요.	Can we get the check, please?	get the check	영국에서는 bill
+s-food-10	카페·식당	따로 계산할게요.	Can we pay separately?	pay separately	
+s-shop-01	쇼핑	그냥 구경하는 중이에요.	I'm just looking, thanks.	just looking	점원이 말을 걸 때
+s-shop-02	쇼핑	이거 다른 색도 있어요?	Do you have this in another color?	in another color	
+s-shop-03	쇼핑	이거 입어 봐도 돼요?	Can I try this on?	try this on	
+s-shop-04	쇼핑	더 큰 사이즈 있어요?	Is there a larger size?	larger size	
+s-shop-05	쇼핑	이거 얼마예요?	How much is this?	How much is	
+s-shop-06	쇼핑	좀 깎아 주실 수 있어요?	Can you give me a discount?	give me a discount	
+s-shop-07	쇼핑	카드 돼요?	Do you take cards?	Do you take	
+s-shop-08	쇼핑	좀 더 생각해 볼게요.	I'll think about it.	think about it	사지 않고 나올 때
+s-shop-09	쇼핑	이거 환불되나요?	Can I get a refund for this?	get a refund	
+s-shop-10	쇼핑	선물 포장해 주실 수 있어요?	Could you gift-wrap it?	gift-wrap	
+s-way-01	길 묻기·교통	실례지만, 역이 어디예요?	Excuse me, where's the station?	Excuse me	
+s-way-02	길 묻기·교통	걸어갈 수 있는 거리예요?	Is it within walking distance?	walking distance	
+s-way-03	길 묻기·교통	거기까지 얼마나 걸려요?	How long does it take to get there?	How long does it take	
+s-way-04	길 묻기·교통	이 버스 시청 가요?	Does this bus go to City Hall?	Does this bus go to	
+s-way-05	길 묻기·교통	어디서 갈아타야 해요?	Where do I transfer?	transfer	
+s-way-06	길 묻기·교통	길을 잃은 것 같아요.	I think I'm lost.	I'm lost	
+s-way-07	길 묻기·교통	지도에서 좀 보여 주실래요?	Can you show me on the map?	show me on the map	
+s-way-08	길 묻기·교통	쭉 가다가 오른쪽으로 도세요.	Go straight and turn right.	Go straight	
+s-way-09	길 묻기·교통	이 주소로 가 주세요.	Please take me to this address.	take me to	택시에서
+s-way-10	길 묻기·교통	여기서 내려 주세요.	You can drop me off here.	drop me off	택시에서
+s-travel-01	호텔·공항	체크인하려고요.	I'd like to check in.	I'd like to	
+s-travel-02	호텔·공항	김민수 이름으로 예약했어요.	The reservation is under Kim Minsu.	under	~의 이름으로 = under
+s-travel-03	호텔·공항	짐 좀 맡길 수 있을까요?	Can I leave my bags here?	leave my bags	
+s-travel-04	호텔·공항	와이파이 비밀번호가 뭐예요?	What's the Wi-Fi password?	Wi-Fi password	
+s-travel-05	호텔·공항	방에 수건이 없어요.	There are no towels in my room.	There are no	
+s-travel-06	호텔·공항	늦게 체크아웃해도 될까요?	Can I get a late checkout?	late checkout	
+s-travel-07	호텔·공항	창가 자리로 주세요.	Can I have a window seat?	window seat	
+s-travel-08	호텔·공항	짐은 몇 개까지 부칠 수 있어요?	How many bags can I check?	check	짐을 부치다 = check
+s-travel-09	호텔·공항	출장 왔어요.	I'm here on business.	on business	입국 심사에서
+s-travel-10	호텔·공항	제 짐이 안 나왔어요.	My bag hasn't arrived.	hasn't arrived	
+s-plan-01	약속·일정	이번 주말에 뭐 해요?	What are you doing this weekend?	What are you doing	
+s-plan-02	약속·일정	시간 되면 커피 한잔해요.	Let's grab a coffee if you're free.	grab a coffee	
+s-plan-03	약속·일정	몇 시가 편해요?	What time works for you?	works for you	
+s-plan-04	약속·일정	저는 금요일 괜찮아요.	Friday works for me.	works for me	
+s-plan-05	약속·일정	미안해요, 그날은 못 가요.	Sorry, I can't make it that day.	can't make it	
+s-plan-06	약속·일정	다른 날로 바꿀 수 있을까요?	Can we reschedule?	reschedule	
+s-plan-07	약속·일정	10분 정도 늦을 것 같아요.	I'm running about ten minutes late.	running	
+s-plan-08	약속·일정	도착하면 문자할게요.	I'll text you when I get there.	when I get there	
+s-plan-09	약속·일정	거의 다 왔어요.	I'm almost there.	almost there	
+s-plan-10	약속·일정	기다리게 해서 미안해요.	Sorry to keep you waiting.	keep you waiting	
+s-polite-01	부탁·감사·사과	부탁 하나 해도 될까요?	Can I ask you a favor?	ask you a favor	
+s-polite-02	부탁·감사·사과	사진 좀 찍어 주실 수 있어요?	Could you take a picture of us?	Could you	
+s-polite-03	부탁·감사·사과	좀 도와줄래요?	Could you give me a hand?	give me a hand	
+s-polite-04	부탁·감사·사과	좀 천천히 말해 주시겠어요?	Could you speak more slowly?	more slowly	
+s-polite-05	부탁·감사·사과	죄송한데, 다시 한 번 말해 주시겠어요?	Sorry, could you say that again?	say that again	
+s-polite-06	부탁·감사·사과	정말 고마워요, 덕분에 살았어요.	Thanks a lot. You're a lifesaver.	lifesaver	
+s-polite-07	부탁·감사·사과	별말씀을요.	Don't mention it.	Don't mention it	고맙다는 말에 대한 대답
+s-polite-08	부탁·감사·사과	늦어서 죄송해요.	Sorry I'm late.	Sorry I'm late	
+s-polite-09	부탁·감사·사과	제 잘못이에요.	That's my fault.	my fault	
+s-polite-10	부탁·감사·사과	괜찮아요, 신경 쓰지 마세요.	It's okay. Don't worry about it.	Don't worry about it	사과를 받았을 때
+s-feel-01	감정·의견	좋은 생각인 것 같아요.	I think it's a good idea.	I think	
+s-feel-02	감정·의견	저도 그렇게 생각해요.	I think so, too.	I think so, too	
+s-feel-03	감정·의견	잘 모르겠어요.	I'm not sure.	not sure	
+s-feel-04	감정·의견	그건 좋은 생각이 아닌 것 같아요.	I don't think that's a good idea.	I don't think	반대 의견을 부드럽게
+s-feel-05	감정·의견	잘됐네요!	Good for you!	Good for you	좋은 소식을 들었을 때
+s-feel-06	감정·의견	그 말 들으니 마음이 안 좋네요.	I'm sorry to hear that.	sorry to hear that	안 좋은 소식을 들었을 때
+s-feel-07	감정·의견	그럴 줄 알았어요.	I knew it.	I knew it	
+s-feel-08	감정·의견	무슨 말인지 알아요.	I know what you mean.	know what you mean	
+s-feel-09	감정·의견	너무 기대돼요.	I can't wait.	I can't wait	
+s-feel-10	감정·의견	상관없어요. 둘 다 좋아요.	I don't mind. Either is fine.	I don't mind	
+s-phone-01	전화·문자	민수 씨와 통화할 수 있을까요?	May I speak to Minsu?	May I speak to	
+s-phone-02	전화·문자	누구시라고 전해 드릴까요?	May I ask who's calling?	who's calling	
+s-phone-03	전화·문자	잠시만 기다려 주세요.	Please hold on a moment.	hold on	
+s-phone-04	전화·문자	지금 통화 괜찮아요?	Is this a good time to talk?	a good time to talk	
+s-phone-05	전화·문자	잘 안 들려요.	I can't hear you very well.	can't hear you	
+s-phone-06	전화·문자	전화가 끊겼어요.	We got cut off.	got cut off	
+s-phone-07	전화·문자	이따 다시 전화할게요.	I'll call you back later.	call you back	
+s-phone-08	전화·문자	메시지 남겨 드릴까요?	Can I take a message?	take a message	
+s-phone-09	전화·문자	답장이 늦어서 미안해요.	Sorry for the late reply.	late reply	
+s-phone-10	전화·문자	끝나면 문자 줘요.	Text me when you're done.	Text me	
