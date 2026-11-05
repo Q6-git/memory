@@ -31,6 +31,14 @@ DECKS = [
         "columns": ["en", "pos", "ko", "ex", "exKo"],
     },
     {
+        "id": "en-words-intermediate",
+        "file": "words-intermediate.tsv",
+        "kind": "word",
+        "title": "회화 필수 단어 · 중급",
+        "description": "원어민이 자주 쓰는 단어 300개 + 구동사·관용 표현 200개 (영 → 한)",
+        "columns": ["en", "pos", "ko", "ex", "exKo"],
+    },
+    {
         "id": "en-sentences-beginner",
         "file": "sentences-beginner.tsv",
         "kind": "sentence",

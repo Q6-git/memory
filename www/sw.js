@@ -1,5 +1,5 @@
 // 서비스 워커: 오프라인 캐시 + 앱이 닫혀 있을 때의 복습 알림
-const SHELL_CACHE = 'doesaegim-shell-v3';
+const SHELL_CACHE = 'doesaegim-shell-v4';
 const META_CACHE = 'doesaegim-meta';
 const SHELL = ['./', './index.html', './styles.css', './app.js', './scheduler.js', './curve.js', './native.js', './decks.js', './tts.js', './decks/index.json', './manifest.webmanifest', './icon.svg'];
 

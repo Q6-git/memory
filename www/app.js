@@ -90,14 +90,24 @@ const pct = (r) => `${Math.round(r * 100)}%`;
 const GRADE_LABEL = { again: '다시', hard: '어려움', good: '알맞음', easy: '쉬움' };
 const speakBtn = (text) => (TTS.supported && text ? `<button class="speak" data-speak="${esc(text)}" aria-label="발음 듣기">🔊</button>` : '');
 
-// 예문에서 단어/핵심 표현을 강조. 활용형(works, looking)과 사이에 낀 목적어(think it over)도 찾는다.
+// 예문에서 단어/핵심 표현을 강조. 활용형(works, came)과 사이에 낀 목적어(put this desk together)도 찾는다.
+const IRREGULAR = {
+  take: 'took|taken', give: 'gave|given', come: 'came', get: 'got|gotten', pay: 'paid', hold: 'held', fall: 'fell|fallen',
+  wear: 'wore|worn', lay: 'laid', blow: 'blew|blown', sleep: 'slept', run: 'ran', break: 'broke|broken', make: 'made',
+  go: 'went|gone', throw: 'threw|thrown', grow: 'grew|grown', bring: 'brought', think: 'thought', keep: 'kept', tear: 'tore|torn',
+  stand: 'stood', hang: 'hung', oversleep: 'overslept', catch: 'caught', lose: 'lost', cut: 'cut', put: 'put', set: 'set', shut: 'shut', let: 'let',
+};
 function highlight(en, key) {
   if (!key) return esc(en);
   let i = en.toLowerCase().indexOf(key.toLowerCase());
   let len = key.length;
   if (i < 0) {
-    const stem = (t) => t.slice(0, Math.max(3, t.length - 1)).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + "[\\w']*";
-    const re = new RegExp('\\b' + key.toLowerCase().split(/\s+/).map(stem).join("\\s+(?:[\\w']+\\s+)?"), 'i');
+    const reEsc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const word = (t) => {
+      const stem = reEsc(t.slice(0, Math.max(3, t.length - 1))) + "[\\w']*";
+      return IRREGULAR[t] ? `(?:${stem}|${IRREGULAR[t]})` : stem;
+    };
+    const re = new RegExp('\\b' + key.toLowerCase().split(/\s+/).map(word).join("\\s+(?:[\\w']+\\s+){0,3}?"), 'i');
     const m = re.exec(en);
     if (!m) return esc(en);
     i = m.index;
@@ -183,7 +193,7 @@ function renderReview(now) {
     if (!stage.started && !state.prechecked[`${deck.id}:${k}`]) return renderPrecheck(deck, stage, meta);
     const r = { kind: deck.kind, deck, ...item };
     return `<section class="review">
-      ${meta}<span class="new-badge">새 카드 · ${esc(deck.title)} · 스테이지 ${k + 1}</span></div>
+      ${meta}<span class="new-badge">${esc(deck.title)} · 스테이지 ${k + 1}</span></div>
       <div class="flash intro">${faceHTML(r, 'front')}<hr>${faceHTML(r, 'back')}</div>
       <p class="hint muted">${r.kind === 'sentence' ? '영어 문장을 들으며 두세 번 따라 말해 보세요.' : '발음을 듣고 예문까지 소리 내어 읽어 보세요.'}</p>
       <div class="row2">
