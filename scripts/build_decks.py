@@ -39,6 +39,14 @@ DECKS = [
         "columns": ["en", "pos", "ko", "ex", "exKo"],
     },
     {
+        "id": "en-words-advanced",
+        "file": "words-advanced.tsv",
+        "kind": "word",
+        "title": "회화 필수 단어 · 고급",
+        "description": "원어민다운 단어 304개 + 구동사·관용 표현 196개 (영 → 한)",
+        "columns": ["en", "pos", "ko", "ex", "exKo"],
+    },
+    {
         "id": "en-sentences-beginner",
         "file": "sentences-beginner.tsv",
         "kind": "sentence",

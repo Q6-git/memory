@@ -68,7 +68,7 @@ test('발음: 단어는 앞면, 문장은 정답, 직접 만든 카드는 영어
 
 test('기본 덱 파일: 개수, 필수 칸, id 중복 없음', () => {
   const index = JSON.parse(readFileSync(new URL('../www/decks/index.json', import.meta.url)));
-  const expected = { 'en-words-beginner': 500, 'en-words-intermediate': 500, 'en-sentences-beginner': 100, 'en-sentences-intermediate': 100 };
+  const expected = { 'en-words-beginner': 500, 'en-words-intermediate': 500, 'en-words-advanced': 500, 'en-sentences-beginner': 100, 'en-sentences-intermediate': 100 };
   for (const f of index) {
     const deck = JSON.parse(readFileSync(new URL(`../www/decks/${f}`, import.meta.url)));
     assert.equal(deck.items.length, expected[deck.id], deck.id);

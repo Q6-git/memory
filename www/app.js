@@ -95,7 +95,7 @@ const IRREGULAR = {
   take: 'took|taken', give: 'gave|given', come: 'came', get: 'got|gotten', pay: 'paid', hold: 'held', fall: 'fell|fallen',
   wear: 'wore|worn', lay: 'laid', blow: 'blew|blown', sleep: 'slept', run: 'ran', break: 'broke|broken', make: 'made',
   go: 'went|gone', throw: 'threw|thrown', grow: 'grew|grown', bring: 'brought', think: 'thought', keep: 'kept', tear: 'tore|torn',
-  stand: 'stood', hang: 'hung', oversleep: 'overslept', catch: 'caught', lose: 'lost', cut: 'cut', put: 'put', set: 'set', shut: 'shut', let: 'let',
+  stand: 'stood', hang: 'hung', oversleep: 'overslept', steal: 'stole|stolen', tie: 'tying|tied', catch: 'caught', lose: 'lost', cut: 'cut', put: 'put', set: 'set', shut: 'shut', let: 'let',
 };
 function highlight(en, key) {
   if (!key) return esc(en);
