@@ -46,6 +46,14 @@ DECKS = [
         "description": "10가지 상황에서 바로 쓰는 문장 100개 (한 → 영)",
         "columns": ["id", "situation", "ko", "en", "key", "note"],
     },
+    {
+        "id": "en-sentences-intermediate",
+        "file": "sentences-intermediate.tsv",
+        "kind": "sentence",
+        "title": "회화 필수 문장 · 중급",
+        "description": "실제 대화에서 막히는 10가지 상황의 문장 100개 (한 → 영)",
+        "columns": ["id", "situation", "ko", "en", "key", "note"],
+    },
 ]
 
 

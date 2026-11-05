@@ -1,0 +1,101 @@
+# id	situation	ko	en	key	note
+s2-work-01	직장·회의	회의 시작할까요?	Shall we get started?	get started	
+s2-work-02	직장·회의	확인해 보고 다시 알려 드릴게요.	Let me check and get back to you.	get back to you	바로 답하기 어려울 때
+s2-work-03	직장·회의	그 건은 제가 맡을게요.	I'll take that on.	take that on	
+s2-work-04	직장·회의	이번 주 금요일까지는 끝낼 수 있을 것 같아요.	I should be able to finish it by this Friday.	should be able to	
+s2-work-05	직장·회의	일정이 좀 빠듯해요.	The schedule is a bit tight.	a bit tight	
+s2-work-06	직장·회의	마감을 하루만 연장해 주실 수 있을까요?	Could I get a one-day extension?	extension	
+s2-work-07	직장·회의	이 건 지금 어디까지 진행됐어요?	Where are we on this?	Where are we on	진행 상황을 물을 때
+s2-work-08	직장·회의	요점만 말씀드릴게요.	I'll get straight to the point.	get straight to the point	
+s2-work-09	직장·회의	그건 다음 회의 때 다시 얘기하죠.	Let's circle back to that at the next meeting.	circle back	회사에서 자주 쓰는 표현
+s2-work-10	직장·회의	오늘은 여기까지 하죠.	Let's call it a day.	call it a day	
+s2-chat-01	근황·수다	요즘 뭐 하고 지냈어요?	What have you been up to lately?	What have you been up to	
+s2-chat-02	근황·수다	요즘 일에 치여 살아요.	I've been swamped with work.	swamped	일이 산더미 같다
+s2-chat-03	근황·수다	그냥 그럭저럭 지내요.	Just getting by.	getting by	
+s2-chat-04	근황·수다	무슨 일 있었어요? 다 말해 봐요.	What happened? Tell me everything.	Tell me everything	
+s2-chat-05	근황·수다	그 소식 들었어요?	Have you heard the news?	Have you heard	
+s2-chat-06	근황·수다	말도 마요, 진짜 최악이었어요.	Don't even get me started. It was the worst.	Don't even get me started	
+s2-chat-07	근황·수다	그거 완전 제 취향이에요.	That's right up my alley.	right up my alley	
+s2-chat-08	근황·수다	요즘 그 드라마에 푹 빠졌어요.	I'm hooked on that show.	hooked on	
+s2-chat-09	근황·수다	시간 가는 줄 몰랐네요.	I lost track of time.	lost track of time	
+s2-chat-10	근황·수다	조만간 또 만나서 얘기해요.	Let's catch up again soon.	catch up	
+s2-care-01	공감·위로	정말 힘들었겠어요.	That must have been really hard.	must have been	
+s2-care-02	공감·위로	그 기분 알아요.	I know how you feel.	how you feel	
+s2-care-03	공감·위로	너무 자책하지 마요.	Don't be so hard on yourself.	hard on yourself	
+s2-care-04	공감·위로	최선을 다했잖아요.	You did your best.	did your best	
+s2-care-05	공감·위로	필요하면 언제든 말해요, 내가 있잖아요.	I'm here if you need me.	here if you need me	
+s2-care-06	공감·위로	다 잘될 거예요.	Everything will work out.	work out	
+s2-care-07	공감·위로	시간이 약이에요.	Time heals all wounds.	heals	
+s2-care-08	공감·위로	그런 일을 겪었다니 정말 안됐어요.	I'm so sorry you had to go through that.	go through	
+s2-care-09	공감·위로	그럴 수도 있죠.	It happens.	It happens	실수한 사람을 안심시킬 때
+s2-care-10	공감·위로	잘했어요, 정말 자랑스러워요.	You did great. I'm so proud of you.	proud of you	
+s2-opin-01	의견·조율	저는 좀 다르게 봐요.	I see it a little differently.	see it a little differently	반대 의견을 부드럽게
+s2-opin-02	의견·조율	무슨 말인지는 알겠는데요…	I see your point, but...	I see your point	
+s2-opin-03	의견·조율	그건 상황에 따라 달라요.	It depends on the situation.	It depends	
+s2-opin-04	의견·조율	서로 조금씩 양보하는 게 어때요?	How about we meet halfway?	meet halfway	
+s2-opin-05	의견·조율	솔직히 별로 안 끌려요.	To be honest, I'm not really feeling it.	not really feeling it	
+s2-opin-06	의견·조율	그 말도 일리가 있네요.	You have a point there.	You have a point	
+s2-opin-07	의견·조율	제가 틀렸을 수도 있지만요…	I could be wrong, but...	I could be wrong	
+s2-opin-08	의견·조율	그건 생각 못 해 봤네요.	I hadn't thought of that.	hadn't thought of	
+s2-opin-09	의견·조율	우리 생각이 같은지 확인하고 싶어서요.	I just want to make sure we're on the same page.	on the same page	
+s2-opin-10	의견·조율	좋은 지적이에요.	That's a good point.	good point	
+s2-ask-01	부탁·거절	잠깐 시간 되면 좀 도와줄래요?	If you have a minute, could you help me out?	help me out	
+s2-ask-02	부탁·거절	귀찮게 해서 미안한데요…	Sorry to bother you, but...	Sorry to bother you	
+s2-ask-03	부탁·거절	이번엔 빠져야 할 것 같아요.	I'm afraid I'll have to pass this time.	have to pass	
+s2-ask-04	부탁·거절	고맙지만 괜찮아요.	Thanks, but I'm good.	I'm good	권유를 거절할 때
+s2-ask-05	부탁·거절	하룻밤 생각해 볼게요.	Let me sleep on it.	sleep on it	
+s2-ask-06	부탁·거절	지금은 좀 곤란해요.	Now's not a good time.	not a good time	
+s2-ask-07	부탁·거절	다음에 하죠.	Maybe some other time.	some other time	
+s2-ask-08	부탁·거절	무리한 부탁인 건 알지만요…	I know it's a lot to ask, but...	a lot to ask	
+s2-ask-09	부탁·거절	이 정도는 해 드려야죠.	That's the least I can do.	the least I can do	
+s2-ask-10	부탁·거절	최고예요. 꼭 갚을게요.	You're the best. I'll make it up to you.	make it up to you	
+s2-fix-01	문제·불만	주문한 게 아직 안 왔어요.	My order still hasn't arrived.	still hasn't arrived	
+s2-fix-02	문제·불만	이거 뭔가 이상한 것 같아요.	I think something's wrong with this.	something's wrong with	
+s2-fix-03	문제·불만	결제가 두 번 된 것 같아요.	I think I was charged twice.	charged twice	
+s2-fix-04	문제·불만	생각했던 거랑 달라요.	This isn't what I expected.	what I expected	
+s2-fix-05	문제·불만	이 문제 어떻게 해결할 수 있을까요?	How can we sort this out?	sort this out	
+s2-fix-06	문제·불만	담당자분과 얘기할 수 있을까요?	Could I speak to someone in charge?	in charge	
+s2-fix-07	문제·불만	환불이나 교환 가능할까요?	Is it possible to get a refund or an exchange?	refund or an exchange	
+s2-fix-08	문제·불만	이런 일이 벌써 세 번째예요.	This is the third time this has happened.	the third time	
+s2-fix-09	문제·불만	30분 넘게 기다리고 있어요.	I've been waiting for over thirty minutes.	I've been waiting	
+s2-fix-10	문제·불만	빨리 처리해 주시면 감사하겠어요.	I'd appreciate it if you could sort it out quickly.	I'd appreciate it if	정중하게 요구할 때
+s2-plan-01	일정 변경	미안한데, 약속을 좀 미뤄야 할 것 같아요.	Sorry, but I need to push back our plans.	push back	
+s2-plan-02	일정 변경	일이 좀 생겨서요.	Something came up.	Something came up	
+s2-plan-03	일정 변경	시간을 조금 앞당길 수 있을까요?	Could we move it up a bit?	move it up	
+s2-plan-04	일정 변경	저 빼고 먼저 시작하세요.	Go ahead and start without me.	start without me	
+s2-plan-05	일정 변경	그날은 선약이 있어요.	I have a prior commitment that day.	prior commitment	
+s2-plan-06	일정 변경	몇 시쯤 도착해요?	What's your ETA?	ETA	도착 예정 시간 (estimated time of arrival)
+s2-plan-07	일정 변경	차가 막혀서 꼼짝도 못 하고 있어요.	I'm stuck in traffic.	stuck in traffic	
+s2-plan-08	일정 변경	계획이 무산됐어요.	Our plans fell through.	fell through	
+s2-plan-09	일정 변경	그냥 그때 상황 봐서 해요.	Let's just play it by ear.	play it by ear	
+s2-plan-10	일정 변경	저는 아무 때나 괜찮아요. 편한 시간 알려 줘요.	I'm flexible. Just let me know what works for you.	what works for you	
+s2-health-01	건강·병원	몸이 좀 안 좋아요.	I'm feeling a bit under the weather.	under the weather	
+s2-health-02	건강·병원	뭔가 걸리려나 봐요.	I think I'm coming down with something.	coming down with	
+s2-health-03	건강·병원	어제부터 열이 나요.	I've had a fever since yesterday.	since yesterday	
+s2-health-04	건강·병원	목이 칼칼해요.	My throat feels scratchy.	scratchy	
+s2-health-05	건강·병원	여기를 누르면 아파요.	It hurts when I press here.	It hurts when	
+s2-health-06	건강·병원	이 약은 얼마나 자주 먹어야 해요?	How often should I take this medicine?	How often should I	
+s2-health-07	건강·병원	부작용 있나요?	Are there any side effects?	side effects	
+s2-health-08	건강·병원	요즘 잠을 잘 못 자요.	I haven't been sleeping well lately.	sleeping well	
+s2-health-09	건강·병원	오늘 병가 낼게요.	I'm going to call in sick today.	call in sick	
+s2-health-10	건강·병원	많이 나아졌어요.	I'm feeling much better.	much better	
+s2-trip-01	여행 돌발 상황	비행기를 놓쳤어요.	I missed my flight.	missed my flight	
+s2-trip-02	여행 돌발 상황	다음 비행기 탈 수 있을까요?	Can I get on the next flight?	next flight	
+s2-trip-03	여행 돌발 상황	지갑을 잃어버렸어요.	I lost my wallet.	lost my wallet	
+s2-trip-04	여행 돌발 상황	가장 가까운 경찰서가 어디예요?	Where's the nearest police station?	police station	
+s2-trip-05	여행 돌발 상황	예약한 방이 아니에요.	This isn't the room I booked.	the room I booked	
+s2-trip-06	여행 돌발 상황	에어컨이 안 돼요.	The air conditioning isn't working.	isn't working	
+s2-trip-07	여행 돌발 상황	캐리어가 파손됐어요.	My suitcase got damaged.	got damaged	
+s2-trip-08	여행 돌발 상황	아직 시차 적응이 안 됐어요.	I'm still jet-lagged.	jet-lagged	
+s2-trip-09	여행 돌발 상황	여기 영어 하시는 분 계세요?	Does anyone here speak English?	speak English	
+s2-trip-10	여행 돌발 상황	대사관에 연락해야 할 것 같아요.	I think I need to contact my embassy.	contact my embassy	
+s2-cheer-01	칭찬·축하	승진 축하해요, 그럴 자격 있어요.	Congrats on your promotion. You deserve it.	You deserve it	
+s2-cheer-02	칭찬·축하	정말 잘 어울려요.	That looks great on you.	looks great on you	옷·머리 등을 칭찬할 때
+s2-cheer-03	칭찬·축하	정말 대단하네요!	That's impressive!	impressive	
+s2-cheer-04	칭찬·축하	덕분에 오늘 기분 최고예요.	You made my day.	made my day	
+s2-cheer-05	칭찬·축하	그동안 고생한 보람이 있네요.	All your hard work paid off.	paid off	
+s2-cheer-06	칭찬·축하	칭찬해 줘서 고마워요.	Thanks, I appreciate the compliment.	appreciate the compliment	
+s2-cheer-07	칭찬·축하	과찬이에요.	You're too kind.	too kind	
+s2-cheer-08	칭찬·축하	잘됐다! 진짜 기뻐요.	That's great news! I'm so happy for you.	happy for you	
+s2-cheer-09	칭찬·축하	이건 축하해야죠!	This calls for a celebration!	calls for a celebration	
+s2-cheer-10	칭찬·축하	당신 아니었으면 못 했을 거예요.	I couldn't have done it without you.	couldn't have done it without you	
